@@ -47,25 +47,13 @@
     }
   }
 
+  const EXCLUDE = ":not(#a11y-widget-root)";
+
   function buildGlobalCSS() {
     const s = state;
     const txtScale = s.textSize / 100;
     const lh = s.lineHeight / 100;
     const ls = s.letterSpacing / 100;
-    const cls = [];
-
-    // Profiles
-    if (s.profile) cls.push("a11y-profile-" + s.profile);
-
-    // Contrast
-    cls.push("a11y-contrast-" + s.contrast);
-
-    // Text align
-    if (s.textAlign !== "standard") cls.push("a11y-align-" + s.textAlign);
-
-    // Reading aids
-    if (s.linkHighlight) cls.push("a11y-link-highlight");
-    if (s.headingHighlight) cls.push("a11y-heading-highlight");
 
     return `
 /* ── A11y Widget Global Styles ─────────────────────────────── */
@@ -82,39 +70,38 @@ html.a11y-active {
 /* ── Profiles ──────────────────────────────────────────────── */
 
 /* Vision impairment */
-body.a11y-profile-vision,
-body.a11y-profile-vision * {
+body.a11y-profile-vision${EXCLUDE} {
   filter: contrast(1.2);
 }
 
 /* Dyslexia */
-body.a11y-profile-dyslexie,
-body.a11y-profile-dyslexie * {
+body.a11y-profile-dyslexie${EXCLUDE},
+body.a11y-profile-dyslexie ${EXCLUDE} {
   font-family: 'OpenDyslexic', Arial, Helvetica, sans-serif !important;
   letter-spacing: 0.12em !important;
   word-spacing: 0.16em !important;
 }
 
 /* ADHD – reduce distractions */
-body.a11y-profile-adhs a,
-body.a11y-profile-adhs button {
+body.a11y-profile-adhs ${EXCLUDE} a,
+body.a11y-profile-adhs ${EXCLUDE} button {
   outline: 2px solid #005fcc !important;
   outline-offset: 2px !important;
 }
-body.a11y-profile-adhs img,
-body.a11y-profile-adhs video,
-body.a11y-profile-adhs iframe {
+body.a11y-profile-adhs ${EXCLUDE} img,
+body.a11y-profile-adhs ${EXCLUDE} video,
+body.a11y-profile-adhs ${EXCLUDE} iframe {
   opacity: 0.7;
 }
 
 /* Motor */
-body.a11y-profile-motor a,
-body.a11y-profile-motor button,
-body.a11y-profile-motor input,
-body.a11y-profile-motor select,
-body.a11y-profile-motor textarea,
-body.a11y-profile-motor [role="button"],
-body.a11y-profile-motor [onclick] {
+body.a11y-profile-motor ${EXCLUDE} a,
+body.a11y-profile-motor ${EXCLUDE} button,
+body.a11y-profile-motor ${EXCLUDE} input,
+body.a11y-profile-motor ${EXCLUDE} select,
+body.a11y-profile-motor ${EXCLUDE} textarea,
+body.a11y-profile-motor ${EXCLUDE} [role="button"],
+body.a11y-profile-motor ${EXCLUDE} [onclick] {
   min-height: 44px !important;
   min-width: 44px !important;
   padding: 12px 18px !important;
@@ -125,20 +112,23 @@ body.a11y-profile-motor {
 }
 
 /* Cognitive */
-body.a11y-profile-kognitiv,
-body.a11y-profile-kognitiv * {
+body.a11y-profile-kognitiv${EXCLUDE} {
   line-height: 1.8 !important;
   letter-spacing: 0.05em !important;
 }
-body.a11y-profile-kognitiv img {
+body.a11y-profile-kognitiv${EXCLUDE} *:not(#a11y-widget-root) {
+  line-height: 1.8 !important;
+  letter-spacing: 0.05em !important;
+}
+body.a11y-profile-kognitiv ${EXCLUDE} img {
   max-width: 100%;
   height: auto;
 }
 
 /* Epilepsy – kill animations */
-body.a11y-profile-epilepsie *,
-body.a11y-profile-epilepsie *::before,
-body.a11y-profile-epilepsie *::after {
+body.a11y-profile-epilepsie ${EXCLUDE} *,
+body.a11y-profile-epilepsie ${EXCLUDE} *::before,
+body.a11y-profile-epilepsie ${EXCLUDE} *::after {
   animation-duration: 0.001s !important;
   animation-delay: 0s !important;
   animation-iteration-count: 1 !important;
@@ -146,8 +136,8 @@ body.a11y-profile-epilepsie *::after {
   transition-delay: 0s !important;
   scroll-behavior: auto !important;
 }
-body.a11y-profile-epilepsie video,
-body.a11y-profile-epilepsie iframe {
+body.a11y-profile-epilepsie ${EXCLUDE} video,
+body.a11y-profile-epilepsie ${EXCLUDE} iframe {
   animation: none !important;
 }
 
@@ -156,10 +146,10 @@ body.a11y-contrast-dark {
   background-color: #1a1a2e !important;
   color: #e0e0e0 !important;
 }
-body.a11y-contrast-dark * {
+body.a11y-contrast-dark${EXCLUDE} * {
   border-color: #444 !important;
 }
-body.a11y-contrast-dark img {
+body.a11y-contrast-dark ${EXCLUDE} img {
   opacity: 0.85;
 }
 
@@ -172,24 +162,24 @@ body.a11y-contrast-high {
   background-color: #000 !important;
   color: #ff0 !important;
 }
-body.a11y-contrast-high * {
+body.a11y-contrast-high${EXCLUDE} * {
   border-color: #ff0 !important;
 }
-body.a11y-contrast-high a {
+body.a11y-contrast-high ${EXCLUDE} a {
   color: #0ff !important;
 }
 
 /* ── Text alignment ────────────────────────────────────────── */
-body.a11y-align-left * {
+body.a11y-align-left ${EXCLUDE} * {
   text-align: left !important;
 }
-body.a11y-align-center * {
+body.a11y-align-center ${EXCLUDE} * {
   text-align: center !important;
 }
 
 /* ── Link highlight ────────────────────────────────────────── */
-body.a11y-link-highlight a,
-body.a11y-link-highlight a * {
+body.a11y-link-highlight ${EXCLUDE} a,
+body.a11y-link-highlight ${EXCLUDE} a * {
   text-decoration: underline !important;
   text-decoration-thickness: 3px !important;
   text-underline-offset: 4px !important;
@@ -200,12 +190,12 @@ body.a11y-link-highlight a * {
 }
 
 /* ── Heading highlight ─────────────────────────────────────── */
-body.a11y-heading-highlight h1,
-body.a11y-heading-highlight h2,
-body.a11y-heading-highlight h3,
-body.a11y-heading-highlight h4,
-body.a11y-heading-highlight h5,
-body.a11y-heading-highlight h6 {
+body.a11y-heading-highlight ${EXCLUDE} h1,
+body.a11y-heading-highlight ${EXCLUDE} h2,
+body.a11y-heading-highlight ${EXCLUDE} h3,
+body.a11y-heading-highlight ${EXCLUDE} h4,
+body.a11y-heading-highlight ${EXCLUDE} h5,
+body.a11y-heading-highlight ${EXCLUDE} h6 {
   border-left: 5px solid #ff6600 !important;
   background-color: rgba(255, 102, 0, 0.10) !important;
   padding: 8px 14px !important;
