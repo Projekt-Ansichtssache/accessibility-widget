@@ -1,39 +1,41 @@
 # Accessibility Widget
 
-A lightweight, standalone accessibility widget built with Vanilla JavaScript. It provides customizable reading and visual assistance features to help make websites more accessible and comfortable to use.
-
-> **Note:** This project is still in an early beta phase. Some features may be incomplete or change over time.
+A standalone, dependency-free accessibility widget for websites. It is implemented in vanilla JavaScript and adds a floating, keyboard-accessible control panel without requiring a build step.
 
 ## Features
 
-- **Accessibility Profiles** – Presets for different accessibility needs, including dyslexia, ADHD, visual and motor impairments.
-- **Text Customization** – Adjust text size, line height, letter spacing, word spacing and fonts.
-- **Visual Adjustments** – Multiple contrast modes, color filters and background themes.
-- **Reading Assistance** – Reading ruler, magnifier, reading progress and focus mode.
-- **Distraction Reduction** – Options to reduce animations and hide distracting elements.
-- **Persistent Settings** – User preferences are automatically saved using Local Storage.
+- Accessibility profiles for vision, dyslexia, ADHD, motor, cognitive and epilepsy-related needs
+- Display adjustments including contrast modes, text size, line height, letter and word spacing, alignment, fonts and color themes
+- Reading aids such as reading progress, reading time, reading ruler, focus mask, magnifier, paragraph and heading highlighting
+- Text-to-speech with adjustable speed and optional sentence highlighting
+- Distraction reduction, Bionic Reading, collapsible long paragraphs and a page outline
+- Focus timer with configurable focus and break durations
+- Preferences persisted in `localStorage`
+- Shadow DOM isolation for the widget UI and support for `prefers-reduced-motion`
 
-## Installation
+## Usage
 
-Add the following script to your website:
+Include the script on the page you want to enhance:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/Projekt-Ansichtssache/accessibility-widget@main/accessibility-widget.js" defer></script>
+<script
+  src="https://cdn.jsdelivr.net/gh/Projekt-Ansichtssache/accessibility-widget@main/accessibility-widget.js"
+  defer
+></script>
 ```
 
-The widget initializes automatically when the page loads. No additional dependencies or build tools are required.
+The widget initializes automatically after the document is ready. No configuration or additional dependencies are required. Some features depend on browser support, including the Web Speech API, Web Audio API and CSS Custom Highlight API.
+
+For production deployments, pin the CDN URL to a reviewed commit or release instead of `main`.
 
 ## Technology
 
 - Vanilla JavaScript
 - Shadow DOM
-- CSS
-- Browser Local Storage API
+- Browser APIs: `localStorage`, Web Speech, Web Audio, MutationObserver and CSS Custom Highlight
 
 ## License
 
-See the repository for licensing information.
+No license file is currently included in this repository.
 
----
-
-*Developed as a student project by students of Gymnasium Oesede.*
+Developed as a student project by students of Gymnasium Oesede.
