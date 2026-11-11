@@ -32,8 +32,4 @@ The widget initializes automatically when the page loads. No additional dependen
 
 ## License
 
-See the repository for licensing information.
-
----
-
-*Developed as a student project by students of Gymnasium Oesede.*
+See the repository for licensing information
