@@ -54,6 +54,4 @@ cookies, a specific origin, or strict security policies.
 
 ## License
 
-No license file is currently included in this repository.
-
-Developed as a student project by students of Gymnasium Oesede.
+[MIT](LICENSE)
