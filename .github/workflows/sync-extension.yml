@@ -33,14 +33,15 @@ jobs:
           mkdir -p extension/vendor
           cp accessibility-widget.js extension/vendor/accessibility-widget.js
 
-      - name: Create pull request
+
+      - name: Create or update pull request
         env:
           GH_TOKEN: ${{ secrets.EXTENSION_SYNC_TOKEN }}
         run: |
           cd extension
 
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "DeinBotName"
+          git config user.email "BOT_EMAIL"
 
           git checkout -B sync/widget origin/main
 
@@ -54,8 +55,15 @@ jobs:
           git commit -m "chore: sync accessibility widget"
           git push --force origin sync/widget
 
-          if gh pr view sync/widget --json number >/dev/null 2>&1; then
-            echo "Existing pull request updated."
+          OPEN_PR=$(gh pr list \
+            --head sync/widget \
+            --base main \
+            --state open \
+            --json number \
+            --jq '.[0].number // empty')
+
+          if [ -n "$OPEN_PR" ]; then
+            echo "Existing open PR #$OPEN_PR updated."
           else
             gh pr create \
               --base main \
