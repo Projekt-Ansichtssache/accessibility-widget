@@ -1,5 +1,6 @@
 /**
- * Accessibility Widget - Standalone Vanilla JS
+ * 
+ * Accessibility Widget by Projekt-Ansichtssache
  * Renders a floating a11y panel in a Shadow DOM with global CSS injection.
  * All preferences are persisted in localStorage.
  */
