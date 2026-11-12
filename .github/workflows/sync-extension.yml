@@ -1,0 +1,65 @@
+
+name: Sync Widget to Extension
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "accessibility-widget.js"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v4
+
+      - name: Clone extension repository
+        env:
+          GH_TOKEN: ${{ secrets.EXTENSION_SYNC_TOKEN }}
+        run: |
+          gh auth setup-git
+          gh repo clone Projekt-Ansichtssache/accessibility-widget-extension extension
+
+      - name: Copy widget
+        run: |
+          mkdir -p extension/vendor
+          cp accessibility-widget.js extension/vendor/accessibility-widget.js
+
+      - name: Create pull request
+        env:
+          GH_TOKEN: ${{ secrets.EXTENSION_SYNC_TOKEN }}
+        run: |
+          cd extension
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git checkout -B sync/widget origin/main
+
+          git add vendor/accessibility-widget.js
+
+          if git diff --cached --quiet; then
+            echo "No changes to sync."
+            exit 0
+          fi
+
+          git commit -m "chore: sync accessibility widget"
+          git push --force origin sync/widget
+
+          if gh pr view sync/widget --json number >/dev/null 2>&1; then
+            echo "Existing pull request updated."
+          else
+            gh pr create \
+              --base main \
+              --head sync/widget \
+              --title "chore: Update accessibility widget" \
+              --body "Automated synchronization of the latest accessibility-widget.js."
+          fi
