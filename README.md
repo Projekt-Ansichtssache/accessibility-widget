@@ -28,6 +28,24 @@ The widget initializes automatically after the document is ready. No configurati
 
 For production deployments, pin the CDN URL to a reviewed commit or release instead of `main`.
 
+## Testserver
+
+Using the local test server, you can test the widget on any website:
+
+```bash
+npm run test-server
+```
+
+Then open `http://localhost:4173` in your browser and enter a domain. The server loads
+the target page through a local proxy and injects the local `accessibility-widget.js` file.
+Subsequent paths such as Next.js assets, CSS, fonts, and client requests are forwarded
+through the same local proxy session.
+The bottom-right test-server menu can be used to enter a new address, reset the target,
+or temporarily hide the accessibility widget.
+This is intended for development and manual testing, not for production use.
+Some websites may not function fully if they rely heavily on
+cookies, a specific origin, or strict security policies.
+
 ## Technology
 
 - Vanilla JavaScript

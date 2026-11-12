@@ -1,0 +1,11 @@
+{
+  "name": "accessibility-widget",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test-server": "node test-server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
