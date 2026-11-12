@@ -36,6 +36,4 @@ For production deployments, pin the CDN URL to a reviewed commit or release inst
 
 ## License
 
-No license file is currently included in this repository.
-
-Developed as a student project by students of Gymnasium Oesede.
+[MIT](LICENSE)
