@@ -40,8 +40,8 @@ jobs:
         run: |
           cd extension
 
-          git config user.name "DeinBotName"
-          git config user.email "BOT_EMAIL"
+          git config user.name "henrymmeybot"
+          git config user.email "bot@henrymeyer.de"
 
           git checkout -B sync/widget origin/main
 
