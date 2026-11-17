@@ -11,8 +11,8 @@
     widgetId: "a11y-widget-root",
     textSelectors: "p, li, blockquote, figcaption, td, th",
     visionPreset: {
-      textSize: 125,
-      lineHeight: 120,
+      textSize: 130,
+      lineHeight: 130,
       letterSpacing: 105,
       contrast: "high",
       linkHighlight: true,
@@ -927,6 +927,57 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
               <div id="speech-status" class="inline-status" role="status" aria-live="polite"></div>
                 </div>
               </details>
+
+                <details class="profile-disclosure" data-profile-settings="vision">
+                  <summary>Sehbehinderung</summary>
+                  <div class="profile-settings-content reading-aids-grid">
+                    <label class="range-row" for="vision-text-size">
+                      <span>Schriftgröße <output data-value-for="textSize">${state.textSize}%</output></span>
+                      <input id="vision-text-size" class="range-control" type="range" min="80" max="200" step="5" data-setting="textSize" value="${state.textSize}" aria-label="Schriftgröße für Sehbehinderung">
+                    </label>
+                    <label class="range-row" for="vision-line-height">
+                      <span>Zeilenabstand <output data-value-for="lineHeight">${state.lineHeight}%</output></span>
+                      <input id="vision-line-height" class="range-control" type="range" min="100" max="220" step="5" data-setting="lineHeight" value="${state.lineHeight}" aria-label="Zeilenabstand für Sehbehinderung">
+                    </label>
+                    <label class="range-row" for="vision-letter-spacing">
+                      <span>Buchstabenabstand <output data-value-for="letterSpacing">${state.letterSpacing}%</output></span>
+                      <input id="vision-letter-spacing" class="range-control" type="range" min="100" max="180" step="5" data-setting="letterSpacing" value="${state.letterSpacing}" aria-label="Buchstabenabstand für Sehbehinderung">
+                    </label>
+                    <label class="select-row" for="vision-font">
+                      <span>Leseschrift</span>
+                      <select id="vision-font" data-setting="readingFont" aria-label="Leseschrift für Sehbehinderung">
+                        <option value="system" ${state.readingFont === "system" ? "selected" : ""}>System</option>
+                        <option value="atkinson" ${state.readingFont === "atkinson" ? "selected" : ""}>Atkinson Hyperlegible</option>
+                        <option value="lexend" ${state.readingFont === "lexend" ? "selected" : ""}>Lexend</option>
+                        <option value="opendyslexic" ${state.readingFont === "opendyslexic" ? "selected" : ""}>OpenDyslexic</option>
+                      </select>
+                    </label>
+                    <div class="toggle-row">
+                      <span class="toggle-label">Links hervorheben</span>
+                      <button class="toggle" role="switch" aria-checked="${state.linkHighlight}" data-toggle="linkHighlight" aria-label="Links für Sehbehinderung hervorheben">
+                        <span class="toggle-thumb"></span>
+                      </button>
+                    </div>
+                    <div class="toggle-row">
+                      <span class="toggle-label">Überschriften hervorheben</span>
+                      <button class="toggle" role="switch" aria-checked="${state.headingHighlight}" data-toggle="headingHighlight" aria-label="Überschriften für Sehbehinderung hervorheben">
+                        <span class="toggle-thumb"></span>
+                      </button>
+                    </div>
+                    <div class="toggle-row">
+                      <span class="toggle-label">Lange Textzeilen begrenzen</span>
+                      <button class="toggle" role="switch" aria-checked="${state.constrainLineWidth}" data-toggle="constrainLineWidth" aria-label="Lange Textzeilen für Sehbehinderung begrenzen">
+                        <span class="toggle-thumb"></span>
+                      </button>
+                    </div>
+                    <div class="toggle-row">
+                      <span class="toggle-label">Graustufen</span>
+                      <button class="toggle" role="switch" aria-checked="${state.grayscale}" data-toggle="grayscale" aria-label="Graustufen für Sehbehinderung aktivieren">
+                        <span class="toggle-thumb"></span>
+                      </button>
+                    </div>
+                  </div>
+                </details>
 
               <details class="profile-disclosure" data-profile-settings="dyslexie">
                 <summary>Dyslexie-Einstellungen</summary>
@@ -1981,13 +2032,25 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
           }
           state.profile = state.profile === p ? null : p;
         }
+        let openedProfileSettings = null;
         shadow.querySelectorAll("[data-profile-settings]").forEach((details) => {
           details.open = details.dataset.profileSettings === p;
+          if (details.open) openedProfileSettings = details;
         });
         syncUI();
         applyGlobalStyles();
         saveState();
-        if (preset) switchTab($("#btn-reading"));
+        if (preset) {
+          switchTab($("#btn-reading"));
+          if (openedProfileSettings) {
+            window.requestAnimationFrame(() => {
+              openedProfileSettings.scrollIntoView({
+                block: "nearest",
+                behavior: shouldReduceMotion() ? "auto" : "smooth",
+              });
+            });
+          }
+        }
       });
     });
 
@@ -2839,6 +2902,9 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
         border: 1px solid #e3e8ef;
         border-radius: 8px;
         background: #f8fafc;
+      }
+      .reading-aids-grid > .select-row {
+        grid-column: 1 / -1;
       }
       .reading-aids-grid > .toggle-row {
         display: grid;
