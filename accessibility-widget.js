@@ -64,8 +64,207 @@
   const motionPausedVideos = new Map();
   let mediaObserver = null;
 
+  const translations = {
+    en: {
+      "Barrierefreiheits-Einstellungen öffnen": "Open accessibility settings",
+      "Barrierefreiheits-Einstellungen schließen": "Close accessibility settings",
+      "Barrierefreiheits-Einstellungen": "Accessibility settings",
+      "Barrierefreiheits-Widget": "Accessibility widget",
+      "Einstellungen": "Settings",
+      "Panel schließen": "Close panel",
+      "Schließen": "Close",
+      "Einstellungs-Kategorien": "Settings categories",
+      "Profile": "Profiles",
+      "Darstellung": "Display",
+      "Lesehilfen": "Reading aids",
+      "Vorlagen": "Presets",
+      "Sprache": "Language",
+      "Automatisch": "Automatic",
+      "Deutsch": "German",
+      "English": "English",
+      "Sehbehinderung": "Visual impairment",
+      "Profil Sehbehinderung aktivieren": "Enable visual impairment profile",
+      "Dyslexie": "Dyslexia",
+      "Profil Dyslexie aktivieren": "Enable dyslexia profile",
+      "ADHS-Modus": "ADHD mode",
+      "ADHS-Modus aktivieren": "Enable ADHD mode",
+      "Motorik": "Motor skills",
+      "Profil Motorik aktivieren": "Enable motor skills profile",
+      "Kognitiv": "Cognitive",
+      "Profil Kognitiv aktivieren": "Enable cognitive profile",
+      "Epilepsie": "Epilepsy",
+      "Profil Epilepsie aktivieren": "Enable epilepsy profile",
+      "Kontrast": "Contrast",
+      "Normal": "Normal",
+      "Dunkel": "Dark",
+      "Hell": "Light",
+      "Hoher Kontrast": "High contrast",
+      "Textgröße": "Text size",
+      "Textgröße verkleinern": "Decrease text size",
+      "Textgröße vergrößern": "Increase text size",
+      "Textgröße zurücksetzen": "Reset text size",
+      "Zurücksetzen": "Reset",
+      "Zeilenabstand": "Line height",
+      "Zeilenabstand verkleinern": "Decrease line height",
+      "Zeilenabstand vergrößern": "Increase line height",
+      "Zeilenabstand zurücksetzen": "Reset line height",
+      "Buchstabenabstand": "Letter spacing",
+      "Buchstabenabstand verkleinern": "Decrease letter spacing",
+      "Buchstabenabstand vergrößern": "Increase letter spacing",
+      "Buchstabenabstand zurücksetzen": "Reset letter spacing",
+      "Textausrichtung": "Text alignment",
+      "Standard": "Default",
+      "Links": "Left",
+      "Zentriert": "Centered",
+      "Allgemeine Lesehilfen": "General reading aids",
+      "Lesefortschritt": "Reading progress",
+      "Lesefortschritt anzeigen": "Show reading progress",
+      "Lesezeit anzeigen": "Show reading time",
+      "Geschätzte Lesezeit anzeigen": "Show estimated reading time",
+      "Geschätzte Lesezeit": "Estimated reading time",
+      "Wird berechnet": "Calculating",
+      "Leselineal": "Reading ruler",
+      "Leselineal aktivieren": "Enable reading ruler",
+      "Bewegung der Leseleiste": "Reading ruler movement",
+      "Zeilenweise einrasten": "Snap to lines",
+      "Mauszeiger folgen": "Follow pointer",
+      "Links hervorheben": "Highlight links",
+      "Hebt Links farblich und durch eine stärkere Schrift hervor.": "Highlights links with color and stronger text.",
+      "Überschriften markieren": "Mark headings",
+      "Überschriften hervorheben": "Highlight headings",
+      "Graustufen": "Grayscale",
+      "Graustufen aktivieren": "Enable grayscale",
+      "Leselupe": "Reading magnifier",
+      "Leselupe aktivieren": "Enable reading magnifier",
+      "Vorlesen": "Read aloud",
+      "Markierten Text oder Abschnitt vorlesen": "Read aloud selected text or section",
+      "Vorlesen pausieren": "Pause reading",
+      "Pause": "Pause",
+      "Vorlesen beenden": "Stop reading",
+      "Stopp": "Stop",
+      "Sprechtempo": "Speech rate",
+      "Schriftgröße": "Font size",
+      "Schriftgröße für Sehbehinderung": "Font size for visual impairment",
+      "Zeilenabstand für Sehbehinderung": "Line height for visual impairment",
+      "Buchstabenabstand für Sehbehinderung": "Letter spacing for visual impairment",
+      "Leseschrift": "Reading font",
+      "Leseschrift für Sehbehinderung": "Reading font for visual impairment",
+      "Dyslexie-Leseschrift": "Dyslexia reading font",
+      "System": "System",
+      "Wortabstand": "Word spacing",
+      "Lange Textzeilen begrenzen": "Limit long text lines",
+      "Hintergrundfarbe": "Background color",
+      "Creme": "Cream",
+      "Hellblau": "Light blue",
+      "Dyslexie-Einstellungen": "Dyslexia settings",
+      "Orientierung": "Orientation",
+      "Fokusmaske": "Focus mask",
+      "Fokusmaske aktivieren": "Enable focus mask",
+      "Höhe der Lesemaske": "Focus mask height",
+      "Ablenkungen": "Distractions",
+      "Animationen und Autoplay stoppen": "Stop animations and autoplay",
+      "Banner und Seitenleisten ausblenden": "Hide banners and sidebars",
+      "Lesen": "Reading",
+      "Bionic Reading": "Bionic Reading",
+      "Bionic Reading aktivieren": "Enable Bionic Reading",
+      "Textbreite auf 60 Zeichen begrenzen": "Limit text width to 60 characters",
+      "Textbreite begrenzen": "Limit text width",
+      "Aktuellen Absatz hervorheben": "Highlight current paragraph",
+      "Satz beim Vorlesen hervorheben": "Highlight sentence while reading",
+      "Satz hervorheben": "Highlight sentence",
+      "Lesezeit und Fokus-Timer": "Reading time and focus timer",
+      "Fokus-Timer einschalten": "Enable focus timer",
+      "Fokus (Min.)": "Focus (min)",
+      "Pause (Min.)": "Break (min)",
+      "Fokusdauer in Minuten": "Focus duration in minutes",
+      "Pausendauer in Minuten": "Break duration in minutes",
+      "Start": "Start",
+      "Zurücksetzen": "Reset",
+      "Hinweis schließen": "Close notice",
+      "Sanften Ton am Timerende": "Play a gentle sound when timer ends",
+      "Timer-Ton aktivieren": "Enable timer sound",
+      "Kurzfassung und Struktur": "Summary and structure",
+      "Inhaltsverzeichnis anzeigen": "Show table of contents",
+      "Lange Absätze einklappbar machen": "Make long paragraphs collapsible",
+      "Ruhige Darstellung": "Calm appearance",
+      "Farbschema": "Color scheme",
+      "Gedämpft": "Muted",
+      "Sepia": "Sepia",
+      "Farbsättigung reduzieren": "Reduce color saturation",
+      "Hinweise dezent anzeigen": "Show notices discreetly",
+      "Dezente Hinweise aktivieren": "Enable discreet notices",
+      "Alles zurücksetzen": "Reset everything",
+      "Ausschnitt unter dem Zeiger · 2×": "Section beneath pointer · 2×",
+      "Lesefortschritt 0%": "Reading progress 0%",
+      "Lesefortschritt ${percent}%": "Reading progress ${percent}%",
+      "Gespeichert": "Saved",
+      "Speichern nicht möglich": "Unable to save",
+      "Vorlesen wird von diesem Browser nicht unterstützt.": "Reading aloud is not supported by this browser.",
+      "Vorlesen fortgesetzt.": "Reading resumed.",
+      "Kein lesbarer Text gefunden.": "No readable text found.",
+      "Vorlesen beendet.": "Reading finished.",
+      "Vorlesen konnte nicht gestartet werden.": "Reading could not be started.",
+      "Vorlesen läuft.": "Reading is in progress.",
+      "Vorlesen pausiert.": "Reading paused.",
+      "Vorlesen gestoppt.": "Reading stopped.",
+      "Fokuszeit beendet. Zeit für eine Pause.": "Focus time finished. Time for a break.",
+      "Pause beendet. Du kannst weiterarbeiten.": "Break finished. You can continue working.",
+      "Fokus": "Focus",
+      "Pause": "Break"
+    }
+  };
+
+  function detectLanguage() {
+    if (state.language === "de") return "de";
+    if (state.language === "en") return "en";
+    const browserLanguages = navigator.languages?.length ? navigator.languages : [navigator.language];
+    for (const value of browserLanguages || []) {
+      const language = String(value || "").toLowerCase();
+      if (language.startsWith("de")) return "de";
+      if (language.startsWith("en")) return "en";
+    }
+    return "de";
+  }
+
+  function translate(key) {
+    const language = detectLanguage();
+    return language === "en" ? (translations.en[key] || key) : key;
+  }
+
+  function applyTranslations(root) {
+    const language = detectLanguage();
+    const english = translations.en;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+    textNodes.forEach((node) => {
+      const text = node.textContent.trim();
+      if (!text) return;
+      if (language === "en") {
+        node.textContent = english[text] || text;
+      } else {
+        const germanKey = Object.keys(english).find((key) => english[key] === text);
+        if (germanKey) node.textContent = germanKey;
+      }
+    });
+
+    root.querySelectorAll("[aria-label], [title], [aria-valuetext]").forEach((element) => {
+      ["aria-label", "title", "aria-valuetext"].forEach((attribute) => {
+        const value = element.getAttribute(attribute);
+        if (!value) return;
+        if (language === "en") element.setAttribute(attribute, english[value] || value);
+        else {
+          const germanKey = Object.keys(english).find((key) => english[key] === value);
+          if (germanKey) element.setAttribute(attribute, germanKey);
+        }
+      });
+    });
+  }
+
   // ── Default State ──────────────────────────────────────────────────
   const defaults = {
+    language: "auto",
     profile: null,
     contrast: "normal",
     textSize: 100,
@@ -167,13 +366,13 @@
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       if (status) {
-        status.textContent = "Gespeichert";
+        status.textContent = translate("Gespeichert");
         status.classList.remove("error");
         status.classList.add("visible");
       }
     } catch (_) {
       if (status) {
-        status.textContent = "Speichern nicht möglich";
+        status.textContent = translate("Speichern nicht möglich");
         status.classList.add("visible", "error");
       }
     }
@@ -776,6 +975,15 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
           </div>
           <div class="panel-body">
 
+            <label class="select-row language-row" for="language-select">
+              <span>Sprache</span>
+              <select id="language-select" aria-label="Sprache">
+                <option value="auto" ${state.language === "auto" ? "selected" : ""}>Automatisch</option>
+                <option value="de" ${state.language === "de" ? "selected" : ""}>Deutsch</option>
+                <option value="en" ${state.language === "en" ? "selected" : ""}>English</option>
+              </select>
+            </label>
+
             <!-- Tab Navigation -->
             <nav class="tabs" role="tablist" aria-label="Einstellungs-Kategorien">
               <button class="tab active" role="tab" aria-selected="true" aria-controls="tab-profiles" id="btn-profiles">Profile</button>
@@ -1200,6 +1408,20 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
     const readingMagnifierViewport = $("#reading-magnifier-viewport");
     const readingMagnifierContent = $("#reading-magnifier-content");
     const readingTimeValue = $("#reading-time");
+
+    applyTranslations(shadow);
+    host.lang = detectLanguage();
+
+    const languageSelect = $("#language-select");
+    languageSelect?.addEventListener("change", () => {
+      state.language = languageSelect.value;
+      host.lang = detectLanguage();
+      document.documentElement.lang = detectLanguage() === "en" ? "en" : "de";
+      applyTranslations(shadow);
+      updateTimerDisplay();
+      calculateReadingTime();
+      saveState();
+    });
     const readingTimeRow = $("#reading-time-row");
     const timerControls = $("#timer-controls");
     const timerStatus = $("#timer-status");
@@ -1238,7 +1460,7 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
       const source = scope || currentReadingScope || document.querySelector("main, [role='main'], article") || document.body;
       const words = source.textContent.trim().split(/\s+/).filter(Boolean).length;
       const minutes = Math.max(1, Math.ceil(words / 200));
-      readingTimeValue.textContent = `ca. ${minutes} Min.`;
+      readingTimeValue.textContent = detectLanguage() === "en" ? `approx. ${minutes} min` : `ca. ${minutes} Min.`;
     }
 
     function updateReadingTimeScope(target) {
@@ -1322,19 +1544,19 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
 
     function startSpeech() {
       if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined") {
-        speechStatus.textContent = "Vorlesen wird von diesem Browser nicht unterstützt.";
+        speechStatus.textContent = translate("Vorlesen wird von diesem Browser nicht unterstützt.");
         return;
       }
       if (window.speechSynthesis.paused) {
         window.speechSynthesis.resume();
-        speechStatus.textContent = "Vorlesen fortgesetzt.";
+        speechStatus.textContent = translate("Vorlesen fortgesetzt.");
         return;
       }
       if (window.speechSynthesis.speaking) return;
 
       const source = getSpeechSource();
       if (!source.text.trim()) {
-        speechStatus.textContent = "Kein lesbarer Text gefunden.";
+        speechStatus.textContent = translate("Kein lesbarer Text gefunden.");
         return;
       }
       speechRoot = source.root;
@@ -1347,31 +1569,31 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
       }
 
       speechUtterance = new SpeechSynthesisUtterance(source.text);
-      speechUtterance.lang = document.documentElement.lang || "de-DE";
+      speechUtterance.lang = detectLanguage() === "en" ? "en-US" : "de-DE";
       speechUtterance.rate = state.speechRate;
       speechUtterance.onboundary = (event) => highlightSpeechSentence(event.charIndex || 0);
       speechUtterance.onend = () => {
         clearSpeechHighlight();
-        speechStatus.textContent = "Vorlesen beendet.";
+        speechStatus.textContent = translate("Vorlesen beendet.");
       };
       speechUtterance.onerror = () => {
         clearSpeechHighlight();
-        speechStatus.textContent = "Vorlesen konnte nicht gestartet werden.";
+        speechStatus.textContent = translate("Vorlesen konnte nicht gestartet werden.");
       };
       window.speechSynthesis.speak(speechUtterance);
-      speechStatus.textContent = "Vorlesen läuft.";
+      speechStatus.textContent = translate("Vorlesen läuft.");
     }
 
     function pauseSpeech() {
       if (!window.speechSynthesis?.speaking) return;
       window.speechSynthesis.pause();
-      speechStatus.textContent = "Vorlesen pausiert.";
+      speechStatus.textContent = translate("Vorlesen pausiert.");
     }
 
     function stopSpeech() {
       window.speechSynthesis?.cancel();
       clearSpeechHighlight();
-      speechStatus.textContent = "Vorlesen gestoppt.";
+      speechStatus.textContent = translate("Vorlesen gestoppt.");
     }
 
     function formatTimer(seconds) {
@@ -1381,7 +1603,7 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
     }
 
     function updateTimerDisplay() {
-      timerStatus.textContent = `${formatTimer(timerRemaining)} ${timerPhase}`;
+      timerStatus.textContent = `${formatTimer(timerRemaining)} ${translate(timerPhase)}`;
     }
 
     function playTimerTone() {
@@ -1422,7 +1644,9 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
         if (timerRemaining === 0) {
           window.clearInterval(timerInterval);
           timerInterval = null;
-          const message = timerPhase === "Fokus" ? "Fokuszeit beendet. Zeit für eine Pause." : "Pause beendet. Du kannst weiterarbeiten.";
+          const message = timerPhase === "Fokus"
+            ? translate("Fokuszeit beendet. Zeit für eine Pause.")
+            : translate("Pause beendet. Du kannst weiterarbeiten.");
           timerPhase = timerPhase === "Fokus" ? "Pause" : "Fokus";
           showTimerNotice(message);
         }
@@ -1709,8 +1933,8 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
       const percent = Math.round(progress * 100);
       readingProgressFill.style.width = `${percent}%`;
       readingProgress.setAttribute("aria-valuenow", String(percent));
-      readingProgress.setAttribute("aria-valuetext", `${percent} Prozent`);
-      readingProgressLabel.textContent = `Lesefortschritt ${percent}%`;
+      readingProgress.setAttribute("aria-valuetext", detectLanguage() === "en" ? `${percent} percent` : `${percent} Prozent`);
+      readingProgressLabel.textContent = detectLanguage() === "en" ? `Reading progress ${percent}%` : `Lesefortschritt ${percent}%`;
       readingMagnifier.classList.toggle("visible", !!state.readingMagnifier && !!magnifierClone);
       readingMagnifier.setAttribute("aria-hidden", String(!state.readingMagnifier));
     }
@@ -1922,7 +2146,7 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
       panelOpen = true;
       panel.classList.remove("hidden");
       trigger.setAttribute("aria-expanded", "true");
-      trigger.setAttribute("aria-label", "Barrierefreiheits-Einstellungen schließen");
+      trigger.setAttribute("aria-label", translate("Barrierefreiheits-Einstellungen schließen"));
       panel.focus();
     }
 
@@ -1930,7 +2154,7 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
       panelOpen = false;
       panel.classList.add("hidden");
       trigger.setAttribute("aria-expanded", "false");
-      trigger.setAttribute("aria-label", "Barrierefreiheits-Einstellungen öffnen");
+      trigger.setAttribute("aria-label", translate("Barrierefreiheits-Einstellungen öffnen"));
       trigger.focus();
     }
 
@@ -2063,6 +2287,10 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
       timerRemaining = state.pomodoroMinutes * 60;
       timerNotice.hidden = true;
       syncUI();
+      languageSelect.value = state.language;
+      host.lang = detectLanguage();
+      applyTranslations(shadow);
+      updateTimerDisplay();
       applyGlobalStyles();
       saveState();
     });
