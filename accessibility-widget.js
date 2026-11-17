@@ -10,6 +10,16 @@
     storageKey: "a11y-widget-state",
     widgetId: "a11y-widget-root",
     textSelectors: "p, li, blockquote, figcaption, td, th",
+    visionPreset: {
+      textSize: 125,
+      lineHeight: 120,
+      letterSpacing: 105,
+      contrast: "high",
+      linkHighlight: true,
+      headingHighlight: true,
+      readingFont: "atkinson",
+      constrainLineWidth: true,
+    },
     adhsPreset: {
       focusMode: true,
       readingRuler: true,
@@ -134,6 +144,16 @@
             Object.assign(state, CONFIG.dyslexiePreset);
             migrated = true;
           }
+        }
+        if (state.profile) {
+          const preset = CONFIG[`${state.profile}Preset`];
+          if (preset) {
+            Object.keys(preset).forEach((key) => {
+              state[key] = defaults[key];
+            });
+          }
+          state.profile = null;
+          migrated = true;
         }
         if (migrated) {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -375,13 +395,15 @@ body.a11y-align-center ${EXCLUDE} * {
 /* ── Link highlight ────────────────────────────────────────── */
 html.a11y-link-highlight body${EXCLUDE} a,
 html.a11y-link-highlight body${EXCLUDE} a * {
+  color: #005fcc !important;
+  font-weight: 650 !important;
   text-decoration: underline !important;
-  text-decoration-thickness: 3px !important;
-  text-underline-offset: 4px !important;
-  background-color: rgba(0, 120, 255, 0.12) !important;
-  border-bottom: 3px solid #0078ff !important;
-  padding-bottom: 1px !important;
-  border-radius: 3px !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 2px !important;
+  background-color: transparent !important;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  border-radius: 0 !important;
 }
 
 /* ── Heading highlight ─────────────────────────────────────── */
@@ -867,7 +889,7 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
               <div class="toggle-row link-highlight-setting">
                 <span class="toggle-label">
                   <span>Links hervorheben</span>
-                  <span class="link-highlight-description" id="link-highlight-description">Unterstreicht Links und hebt sie farblich ab.</span>
+                  <span class="link-highlight-description" id="link-highlight-description">Hebt Links farblich und durch eine stärkere Schrift hervor.</span>
                 </span>
                 <button class="toggle" role="switch" aria-checked="${state.linkHighlight}" data-toggle="linkHighlight" aria-label="Links hervorheben" aria-describedby="link-highlight-description">
                   <span class="toggle-thumb"></span>
@@ -2876,6 +2898,132 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
         max-width: none;
         min-width: 0;
         box-sizing: border-box;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :host {
+          color: #f1f5f9;
+          color-scheme: dark;
+        }
+        .panel {
+          background: #242424;
+          border-color: #4a4a4a;
+          color: #f1f5f9;
+        }
+        .panel-header {
+          background: #303030;
+          border-bottom-color: #4a4a4a;
+        }
+        .panel-title,
+        .stepper-value {
+          color: #f1f5f9;
+        }
+        .icon-btn {
+          color: #cbd5e1;
+        }
+        .icon-btn:hover,
+        .tabs,
+        .profile-btn,
+        .contrast-btn,
+        .stepper-btn,
+        .align-btn,
+        .reading-aids-grid > .toggle-row,
+        .reading-aids-grid > .select-row {
+        background: #383838;
+        }
+        .icon-btn:hover {
+        background: #4a4a4a;
+        }
+        .tabs {
+        background: #181818;
+        }
+        .tab,
+        .section-label,
+        .profile-name,
+        .contrast-btn,
+        .stepper-btn,
+        .align-btn,
+        .toggle-label,
+        .range-row,
+        .select-row,
+        .info-row,
+        .timer-settings label,
+        .inline-status {
+          color: #cbd5e1;
+        }
+        .tab:hover {
+          color: #f1f5f9;
+        }
+        .tab.active,
+        .profile-btn.active,
+        .contrast-btn.active,
+        .align-btn.active {
+          background: #505050;
+          color: #fff;
+        }
+        .profile-btn,
+        .contrast-btn,
+        .stepper-btn,
+        .align-btn {
+          border-color: #5a5a5a;
+        }
+        .profile-btn:hover,
+        .stepper-btn:hover {
+          background: #4a4a4a;
+        }
+        .toggle-row {
+          border-bottom-color: #475569;
+        }
+        .stepper-btn.reset {
+          background: transparent;
+        }
+        .stepper-btn.reset:hover {
+          background: #450a0a;
+        }
+        .select-row select,
+        .timer-settings input {
+          background: #1c1c1c;
+          border-color: #5a5a5a;
+          color: #f1f5f9;
+        }
+        .action-btn,
+        .reset-all-btn {
+          background: #242424;
+          color: #e0e0e0;
+        }
+        .action-btn:hover,
+        .reset-all-btn:hover {
+          background: #4a4a4a;
+          color: #fff;
+        }
+        .calm-notice {
+          background: #333;
+          color: #f0f0f0;
+        }
+        .calm-notice button,
+        .page-outline a {
+          color: #e0e0e0;
+        }
+        .calm-notice.assertive {
+          background: #450a0a;
+        }
+        .page-outline {
+          border-left-color: #5a5a5a;
+        }
+        .profile-disclosure {
+          background: #292929;
+          border-color: #5a5a5a;
+        }
+        .profile-disclosure summary {
+          color: #f1f5f9;
+        }
+        .reading-aids-grid > .toggle-row,
+        .reading-aids-grid > .select-row {
+          border-color: #4a4a4a;
+        }
+        .link-highlight-description {
+          color: #bdbdbd;
+        }
       }
 
       @media (max-width: 420px) {

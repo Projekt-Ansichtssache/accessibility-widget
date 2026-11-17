@@ -5,12 +5,14 @@ A standalone, dependency-free accessibility widget for websites. It is implement
 ## Features
 
 - Accessibility profiles for vision, dyslexia, ADHD, motor, cognitive and epilepsy-related needs
+- The vision profile increases readability with larger text, stronger contrast and clearer structure
 - Display adjustments including contrast modes, text size, line height, letter and word spacing, alignment, fonts and color themes
 - Reading aids such as reading progress, reading time, reading ruler, focus mask, magnifier, paragraph and heading highlighting
 - Text-to-speech with adjustable speed and optional sentence highlighting
 - Distraction reduction, Bionic Reading, collapsible long paragraphs and a page outline
 - Focus timer with configurable focus and break durations
-- Preferences persisted in `localStorage`
+- Preferences persisted in `localStorage`; profiles must be activated manually and are not restored automatically
+- The widget follows the device's light or dark color scheme without changing the page layout
 - Shadow DOM isolation for the widget UI and support for `prefers-reduced-motion`
 
 ## Usage
