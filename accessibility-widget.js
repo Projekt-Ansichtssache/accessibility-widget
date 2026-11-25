@@ -11,7 +11,7 @@
     widgetId: "a11y-widget-root",
     textSelectors: "p, li, blockquote, figcaption, td, th",
     visionPreset: {
-      textSize: 130,
+      textSize: 150,
       lineHeight: 130,
       letterSpacing: 105,
       contrast: "high",
@@ -572,15 +572,43 @@ html.a11y-contrast-light body {
   color: #222 !important;
 }
 
+html.a11y-contrast-high {
+  background-color: #000 !important;
+}
 html.a11y-contrast-high body {
   background-color: #000 !important;
-  color: #ff0 !important;
+  background-image: none !important;
+  color: #fff !important;
 }
-html.a11y-contrast-high body${EXCLUDE} * {
-  border-color: #ff0 !important;
+html.a11y-contrast-high body > :not(#a11y-widget-root),
+html.a11y-contrast-high body > :not(#a11y-widget-root) * {
+  background-color: #000 !important;
+  background-image: none !important;
+  color: #fff !important;
+  border-color: #fff !important;
 }
 html.a11y-contrast-high body ${EXCLUDE} a {
   color: #0ff !important;
+}
+@media (prefers-color-scheme: light) {
+  html.a11y-contrast-high {
+    background-color: #fff !important;
+  }
+  html.a11y-contrast-high body {
+    background-color: #fff !important;
+    background-image: none !important;
+    color: #111 !important;
+  }
+  html.a11y-contrast-high body > :not(#a11y-widget-root),
+  html.a11y-contrast-high body > :not(#a11y-widget-root) * {
+    background-color: #fff !important;
+    background-image: none !important;
+    color: #111 !important;
+    border-color: #111 !important;
+  }
+  html.a11y-contrast-high body ${EXCLUDE} a {
+    color: #005fcc !important;
+  }
 }
 
 /* ── Text alignment ────────────────────────────────────────── */
@@ -594,7 +622,7 @@ body.a11y-align-center ${EXCLUDE} * {
 /* ── Link highlight ────────────────────────────────────────── */
 html.a11y-link-highlight body${EXCLUDE} a,
 html.a11y-link-highlight body${EXCLUDE} a * {
-  color: #005fcc !important;
+  color: #006b5f !important;
   font-weight: 650 !important;
   text-decoration: underline !important;
   text-decoration-thickness: 2px !important;
@@ -603,6 +631,16 @@ html.a11y-link-highlight body${EXCLUDE} a * {
   border-bottom: none !important;
   padding-bottom: 0 !important;
   border-radius: 0 !important;
+}
+html.a11y-link-highlight.a11y-contrast-high body${EXCLUDE} a,
+html.a11y-link-highlight.a11y-contrast-high body${EXCLUDE} a * {
+  color: #ffeb3b !important;
+}
+@media (prefers-color-scheme: light) {
+  html.a11y-link-highlight.a11y-contrast-high body${EXCLUDE} a,
+  html.a11y-link-highlight.a11y-contrast-high body${EXCLUDE} a * {
+    color: #006b5f !important;
+  }
 }
 
 /* ── Heading highlight ─────────────────────────────────────── */
@@ -714,6 +752,57 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
   }
 
   const originalTextStyles = new Map();
+  const originalContrastBorderStyles = new Map();
+
+  function restoreContrastBorderStyles() {
+    originalContrastBorderStyles.forEach((original, element) => {
+      if (!element.isConnected) return;
+      if (original.value) {
+        element.style.setProperty("border-color", original.value, original.priority);
+      } else {
+        element.style.removeProperty("border-color");
+      }
+    });
+    originalContrastBorderStyles.clear();
+  }
+
+  function applyContrastBorderStyles() {
+    if (state.contrast !== "high") {
+      restoreContrastBorderStyles();
+      return;
+    }
+
+    document.querySelectorAll("body > :not(#a11y-widget-root), body > :not(#a11y-widget-root) *").forEach((element) => {
+      if (!originalContrastBorderStyles.has(element)) {
+        originalContrastBorderStyles.set(element, {
+          value: element.style.getPropertyValue("border-color"),
+          priority: element.style.getPropertyPriority("border-color"),
+        });
+      }
+      const backgrounds = [];
+      for (let ancestor = element; ancestor; ancestor = ancestor.parentElement) {
+        const values = getComputedStyle(ancestor).backgroundColor.match(/[\d.]+/g)?.map(Number);
+        if (values?.length >= 3) {
+          const alpha = values.length > 3 ? values[3] : 1;
+          backgrounds.push({
+            color: values.slice(0, 3),
+            alpha,
+          });
+          if (alpha >= 1) break;
+        }
+      }
+      let background = [255, 255, 255];
+      for (let index = backgrounds.length - 1; index >= 0; index--) {
+        const layer = backgrounds[index];
+        background = background.map((channel, i) => layer.color[i] * layer.alpha + channel * (1 - layer.alpha));
+      }
+      const luminance = background[0] * 0.299 + background[1] * 0.587 + background[2] * 0.114;
+      const borderColor = luminance > 127 ? "#111" : "#fff";
+      if (element.style.getPropertyValue("border-color") !== borderColor || element.style.getPropertyPriority("border-color") !== "important") {
+        element.style.setProperty("border-color", borderColor, "important");
+      }
+    });
+  }
 
   function applyTextAdjustments() {
     const active = state.textSize !== 100 || state.lineHeight !== 100 || state.letterSpacing !== 100;
@@ -818,6 +907,7 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
     htmlRoot.classList.toggle("a11y-link-highlight", !!state.linkHighlight);
     htmlRoot.classList.toggle("a11y-grayscale", !!state.grayscale);
     htmlRoot.classList.toggle("a11y-page-filter", state.profile === "vision" || state.grayscale || ["soft", "sepia", "dark"].includes(state.colorTheme) || state.reducedSaturation);
+    applyContrastBorderStyles();
 
     // Align
     document.body.classList.remove("a11y-align-left", "a11y-align-center");
@@ -894,6 +984,7 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
 
   // ── Reset global styles on cleanup ─────────────────────────────────
   function clearGlobalStyles() {
+    restoreContrastBorderStyles();
     if (styleEl) {
       styleEl.remove();
       styleEl = null;
@@ -1063,9 +1154,13 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
             <!-- Tab: Reading Aids -->
             <div class="tab-panel hidden" id="tab-reading" role="tabpanel" aria-labelledby="btn-reading">
 
-              <details class="profile-disclosure" data-profile-settings="general">
+              <details class="profile-disclosure" data-profile-settings="general" open>
                 <summary>Allgemeine Lesehilfen</summary>
                 <div class="profile-settings-content reading-aids-grid">
+              <label class="range-row" for="general-text-size">
+                <span>Schriftgröße <output data-value-for="textSize">${state.textSize}%</output></span>
+                <input id="general-text-size" class="range-control" type="range" min="60" max="400" step="10" data-setting="textSize" value="${state.textSize}" aria-label="Schriftgröße">
+              </label>
               <div class="toggle-row">
                 <span class="toggle-label">Lesefortschritt</span>
                 <button class="toggle" role="switch" aria-checked="${state.readingProgress}" data-toggle="readingProgress" aria-label="Lesefortschritt anzeigen">
@@ -2258,7 +2353,7 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
         }
         let openedProfileSettings = null;
         shadow.querySelectorAll("[data-profile-settings]").forEach((details) => {
-          details.open = details.dataset.profileSettings === p;
+          details.open = details.dataset.profileSettings === "general" || details.dataset.profileSettings === p;
           if (details.open) openedProfileSettings = details;
         });
         syncUI();
@@ -2516,8 +2611,10 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
         border-radius: 6px;
         background: #fff;
         color: #172033;
-        font-size: 14px;
+        font-family: "Atkinson Hyperlegible", Arial, Helvetica, sans-serif;
+        font-size: 18px;
         font-weight: 700;
+        line-height: 1.4;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
       }
       .reading-progress.visible,
@@ -2567,9 +2664,10 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
         border-radius: 14px;
         background: #fff;
         color: #172033;
-        font-size: 24px;
+        font-family: "Atkinson Hyperlegible", Arial, Helvetica, sans-serif;
+        font-size: 28px;
         font-weight: 600;
-        line-height: 1.35;
+        line-height: 1.45;
         box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
         visibility: hidden;
         pointer-events: none;
@@ -2577,7 +2675,7 @@ body.a11y-collapse-long ${EXCLUDE} p.a11y-collapsible:focus-visible {
       }
       .reading-magnifier-title {
         color: #005fcc;
-        font-size: 12px;
+        font-size: 16px;
         font-weight: 800;
         text-transform: uppercase;
       }
